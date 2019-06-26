@@ -1,19 +1,15 @@
 #
-# This is a Shiny web application. You can run the application by clicking
-# the 'Run App' button above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
+# This app displays impact factor information for
+# commonly used neuroscience journals
 
+## Libraries
 library(shiny)
 library(shinyWidgets)
 library(ggplot2)
 library(tidyverse)
 library(grid)
 library(ggrepel)
-data_path <- '/Users/larsenb/Documents/ImpactFactors/'
+data_path <- 'data/'
 
 ## Function to read data
 import_JIF <- function(incsv){
@@ -41,6 +37,8 @@ for (f in journal_csvs[2:length(journal_csvs)]) {
 # Trim PNAS name
 ImpactTable$Journal[startsWith(x = ImpactTable$Journal, prefix = "Proceedings")] = "PNAS"
 
+
+## App layout and functions
 ui <- fluidPage(
   # Application title
   titlePanel("Journal Impact Factors"),
