@@ -14,7 +14,7 @@ data_path <- 'data/'
 ## Function to read data
 import_JIF <- function(incsv){
   if_data <- read.csv(incsv,skip = 1,stringsAsFactors = F,na.strings = "Not Available")
-  if_data$Year <- as.numeric(if_data$Year)
+  if_data$Year <- suppressWarnings(as.numeric(if_data$Year))
   if_data <- if_data %>% drop_na()
   if_data_title <- gsub(
     x=colnames(
