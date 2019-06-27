@@ -1,4 +1,4 @@
-#
+# Impact Factors
 # This app displays impact factor information for
 # commonly used neuroscience journals
 
@@ -36,6 +36,10 @@ for (f in journal_csvs[2:length(journal_csvs)]) {
 }
 # Trim PNAS name
 ImpactTable$Journal[startsWith(x = ImpactTable$Journal, prefix = "Proceedings")] = "PNAS"
+# Capitalize JAMA
+ImpactTable$Journal <- gsub(x = ImpactTable$Journal, pattern = "Jama", replacement = "JAMA")
+# Capitalize PLoS
+ImpactTable$Journal <- gsub(x = ImpactTable$Journal, pattern = "Plos", replacement = "PLoS")
 
 
 ## App layout and functions
@@ -44,8 +48,10 @@ ui <- fluidPage(
   titlePanel("Journal Impact Factors"),
   
   inputPanel(
-    pickerInput("Journal","Journal",sort(unique(ImpactTable$Journal)),multiple = T,options = list(`actions-box` = TRUE)),
-    selectInput("Year","Rank Year",unique(ImpactTable$Year))
+    h6('Select the journals for which you would like impact factor information over time.'),
+    pickerInput("Journal","Select Journals",sort(unique(ImpactTable$Journal)),multiple = T,options = list(`actions-box` = TRUE)),
+    h6('The selected journals will also be ranked by impact factor for the given year.'),
+    selectInput("Year","Ranking Year",unique(ImpactTable$Year))
   ),
   
   mainPanel(
@@ -85,7 +91,7 @@ server <- function(input, output) {
       geom_bar(stat = "identity",aes(fill = Journal)) + coord_flip() + 
       geom_text(aes(label=Journal.Impact.Factor),hjust=1) +
       theme(legend.position = "none")+
-      ylab("Impact Factor") + xlab("Journal") + ggtitle(sprintf("Ranking for year %s",input$Year))
+      ylab("Impact Factor") + ggtitle(sprintf("Ranking for year %s",input$Year))
   })
   
 }
