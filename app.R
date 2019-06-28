@@ -10,6 +10,7 @@ library(tidyverse)
 library(grid)
 library(ggrepel)
 data_path <- 'data/'
+set_theme(base = theme_classic())
 
 ## Function to read data
 import_JIF <- function(incsv){
