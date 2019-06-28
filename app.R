@@ -37,6 +37,7 @@ for (f in journal_csvs[2:length(journal_csvs)]) {
 # Trim PNAS name
 ImpactTable$Journal[startsWith(x = ImpactTable$Journal, prefix = "Proceedings")] = "PNAS"
 # Capitalize JAMA
+ImpactTable$Journal[startsWith(x = ImpactTable$Journal, prefix = "Jama-Journal")] = "JAMA"
 ImpactTable$Journal <- gsub(x = ImpactTable$Journal, pattern = "Jama", replacement = "JAMA")
 # Capitalize PLoS
 ImpactTable$Journal <- gsub(x = ImpactTable$Journal, pattern = "Plos", replacement = "PLoS")
@@ -74,8 +75,10 @@ server <- function(input, output) {
       geom_point()+
       theme(plot.margin = unit(c(1,3,1,1), "lines")) +
       geom_text_repel(data = thisTable %>% filter(Year == 2018),aes(label=Journal)) +
-      theme(legend.position = "none")+
-      xlab("Year") + ylab("Impact Factor") + ggtitle("Impact by Year")
+      theme(legend.position = "none") + 
+      theme(axis.text.y = element_text(size = 12), axis.text.x = element_text(size = 12),
+            axis.title.y = element_text(size = 12), axis.title.x = element_text(size = 12)) +
+      xlab("Year") + ylab("Impact Factor") + ggtitle("Impact by year")
     gt <- ggplotGrob(g)
     gt$layout$clip[gt$layout$name == "panel"] <- "off"
     grid.draw(gt)
@@ -90,7 +93,8 @@ server <- function(input, output) {
     ggplot(data = yearTable, aes(x = reorder(Journal,Journal.Impact.Factor), y = Journal.Impact.Factor,Group = Journal)) + 
       geom_bar(stat = "identity",aes(fill = Journal)) + coord_flip() + 
       geom_text(aes(label=Journal.Impact.Factor),hjust=1) +
-      theme(legend.position = "none")+
+      theme(legend.position = "none")+ 
+      theme(axis.title.y=element_blank(),axis.text.y = element_text(size = 12), axis.text.x = element_text(size = 12),axis.title.x = element_text(size = 12)) +
       ylab("Impact Factor") + ggtitle(sprintf("Ranking for year %s",input$Year))
   })
   
